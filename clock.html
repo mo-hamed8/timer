@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #282c34;
+    color: #61dafb;
+  }
+  
+  .stopwatch-container {
+    font-family: 'Arial', sans-serif;
+    font-size: 2em;
+    text-align: center;
+  }
+  
+  .stopwatch {
+    border: 2px solid #61dafb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    margin: 5px;
+    padding: 8px 16px;
+    font-size: 1em;
+    background-color: #61dafb;
+    color: #282c34;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #43a0e5;
+  }</style>
+  <title>Stopwatch</title>
+</head>
+<body>
+  <div class="stopwatch-container">
+    <div id="display" class="stopwatch">00:00:00</div>
+    <button id="startBtn" onclick="startStopwatch()">Start</button>
+    <button id="stopBtn" onclick="stopStopwatch()">Stop</button>
+    <button id="resetBtn" onclick="resetStopwatch()">Reset</button>
+  </div>
+  <script>let startTime;
+    let isRunning = false;
+    let total_time=0;
+    let part_time=0;
+    
+    function startStopwatch() {
+      if (!isRunning) {
+        startTime = new Date().getTime();
+        isRunning = true;
+        updateStopwatch();
+      }
+    }
+    
+    function stopStopwatch() {
+      isRunning = false;
+      total_time=part_time;
+      part_time=0;
+    }
+    
+    function resetStopwatch() {
+      isRunning = false;
+      total_time=0;
+      part_time=0;
+      document.getElementById('display').innerText = '00:00:00';
+    }
+    
+    function updateStopwatch() {
+      if (isRunning) {
+        const currentTime = new Date().getTime();
+        const elapsedMillis = (currentTime - startTime)+total_time;
+        part_time=elapsedMillis;
+    
+        const hours = Math.floor(elapsedMillis / (1000 * 60 * 60));
+        const minutes = Math.floor((elapsedMillis % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((elapsedMillis % (1000 * 60)) / 1000);
+    
+        const timeString = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        document.getElementById('display').innerText = timeString;
+    
+        setTimeout(updateStopwatch, 1000);
+      }
+    }
+    
+    function pad(num) {
+      return num.toString().padStart(2, '0');
+    }</script>
+</body>
+</html>
